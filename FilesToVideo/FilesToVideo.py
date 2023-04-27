@@ -26,6 +26,8 @@ def creatdir(path):
 
 def FTP(filepath):
     
+    compre=4
+
     file_name = filepath.split("/")[-1]
     path = "C:/ISG/FilesToVideo/images/"
     creatdir(path+file_name)
@@ -38,7 +40,7 @@ def FTP(filepath):
         t = 0
 
         while True:
-            file = f.read(115200)
+            file = f.read(int(115200/compre))
             if not file:
                 break
             file_int = int.from_bytes(file, byteorder='little')
@@ -51,15 +53,16 @@ def FTP(filepath):
             print("now is "+str(t)+".png")
             image = Image.new(mode="RGB", size=(w, h))
             img=image.load()
-            i=0
+            bn=0
             for x in range(w):
-                for y in range(0,h,1):
+                for y in range(0,h,compre):
                     try:
-                        k = file_bits[i]
+                        k = file_bits[bn]
                     except:
                         break
                     if k == "1":
-                        img[x, y] = tt
+                        for i in range(compre):
+                            img[x, y+i] = tt
                     # img[x, y+1]=tt
                     # img[x, y+2] = tt
                     # img[x, y+3]=tt
@@ -68,7 +71,8 @@ def FTP(filepath):
                     # img[x, y+6] = tt
                     # img[x, y+7]=tt
                     else:
-                        img[x, y] = ff
+                        for i in range(compre):
+                            img[x, y+i] = ff
                     # img[x, y+1] = ff
                     # img[x, y+2] = ff
                     # img[x, y+3]=ff
@@ -76,8 +80,7 @@ def FTP(filepath):
                     # img[x, y+5] = ff
                     # img[x, y+6] = ff
                     # img[x, y+7]=ff
-                    i+=1
-
+                    bn+=1
             
             image.save(path+file_name+"/"+str(t)+".png")
             t += 1
