@@ -12,7 +12,7 @@ states=""
 
 
 
-filepath="C:/ISG/VideoToFiles/videos/WinMerge 2 16 28 Setup .exe,68,468928.mp4"
+filepath="C:/ISG/VideoToFiles/videos/WinMerge 2 16 28 Setup .exe,271,8128.mp4"
 
 try:
     file_name,framenum,lastframepnum=str(filepath.split("/")[-1])[:-4].split(",")
@@ -44,6 +44,9 @@ def VTP(Vpath,filename):
 
 
 def PTF(filename,frame_num,last_frame_pnum):
+
+    compre=4
+
     with open("C:/ISG/files/"+filename, "wb") as file:
         for num in range(frame_num):
             bits=""
@@ -51,10 +54,12 @@ def PTF(filename,frame_num,last_frame_pnum):
             print("here is "+str(num)+'.png')
             img = cv2.imread(images)
             for y in range(w):
-                for x in range(0,h,1):
-                    k=int(img[x, y][2])
+                for x in range(0,h,compre):
+                    sum=0
+                    for i in range(compre):
+                        sum=sum+int(img[x+i, y][2])
                     # +int(img[x+1,y][2])+int(img[x+2,y][2])+int(img[x+3,y][2])+int(img[x+4,y][2])+int(img[x+5,y][2])+int(img[x+6,y][2])+int(img[x+7,y][2])
-                    if (k) < 128:
+                    if sum < (128*compre):
                         bits=bits+"0"
                     else:
                         bits=bits+"1"
